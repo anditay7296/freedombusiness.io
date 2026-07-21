@@ -4,8 +4,9 @@ body.popup-open {
   overflow: hidden;
 }
 
-/* GHL form iframe inside the popup */
-.cform-eUKP5_5Gaa iframe {
+/* GHL form iframes (popup + the inline form revealed on the page) */
+.cform-eUKP5_5Gaa iframe,
+.cform-daxRYlzQNW iframe {
   display: block;
   width: 100%;
   min-height: 420px;
@@ -51,14 +52,9 @@ body.popup-open {
   background: rgba(0, 0, 0, 0.9);
 }
 
-/* Mobile-only sticky bottom CTA bar ("免费继续 STEP #2") — on the live GHL page
-   this section is display:none on desktop and fixed to the viewport bottom on mobile */
-@media screen and (min-width: 481px) {
-  .clone-sticky-bar {
-    display: none !important;
-  }
-}
-
+/* Bottom CTA bar ("免费继续 STEP #2"). On the live GHL page this is hidden on
+   desktop, but everything is shown here by request: on desktop it renders inline
+   at its natural position in the page, and stays fixed to the viewport on mobile. */
 @media screen and (max-width: 480px) {
   .clone-sticky-bar {
     position: fixed;
