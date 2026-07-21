@@ -86,8 +86,66 @@
     });
   });
 
+  /* ---------- Ringgit/USD comparison slider ---------- */
+  // The GHL runtime makes .img-comp-slider draggable; this reproduces it, including
+  // the 1px offset that compensates for the overlay's border-right.
+  document.querySelectorAll('.img-comp-container').forEach(function (cont) {
+    var overlay = cont.querySelector('.img-comp-overlay');
+    var slider = cont.querySelector('.img-comp-slider');
+    var box = cont.querySelector('.img-comp-responsive') || cont;
+    if (!overlay || !slider) return;
+
+    var dragging = false;
+
+    function slide(x) {
+      var w = box.offsetWidth;
+      if (x < 0) x = 0;
+      if (x > w) x = w;
+      overlay.style.width = x + 'px';
+      slider.style.left = (x - 1) + 'px';
+    }
+
+    function offsetX(e) {
+      var pt = e.touches && e.touches.length ? e.touches[0] : e;
+      return pt.pageX - (box.getBoundingClientRect().left + window.pageXOffset);
+    }
+
+    function start(e) {
+      dragging = true;
+      e.preventDefault();
+    }
+
+    function move(e) {
+      if (!dragging) return;
+      e.preventDefault();
+      slide(offsetX(e));
+    }
+
+    function stop() { dragging = false; }
+
+    slider.addEventListener('mousedown', start);
+    slider.addEventListener('touchstart', start, { passive: false });
+    window.addEventListener('mousemove', move);
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('touchend', stop);
+
+    // clicking anywhere on the image jumps the divider there, as on the live page
+    box.addEventListener('click', function (e) {
+      if (e.target === slider || slider.contains(e.target)) return;
+      slide(offsetX(e));
+    });
+
+    // stop the browser's native image-drag ghost from hijacking the gesture
+    cont.querySelectorAll('img').forEach(function (img) {
+      img.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    });
+  });
+
   /* ---------- Hosted video (HLS, autoplay muted, click to enable sound) ---------- */
   var HLS_SRC = 'https://content.apisystem.tech/hls/medias/7YOe2MHgM2XNDGbGVilt/media/transcoded_videos/cts-0fe6c8cb0df85a55_,360,480,720,1080,p.mp4.urlset/master.m3u8';
+  // Direct progressive source, used if HLS is unavailable or fails to load
+  var MP4_SRC = 'https://assets.cdn.filesafe.space/7YOe2MHgM2XNDGbGVilt/media/6a2ae08f8f3ec6e08aeeec37.mp4';
   var videoWrap = document.querySelector('.c-video .videobox');
   if (videoWrap) {
     var thumb = videoWrap.querySelector('.hosted-video-thumbnail');
@@ -118,6 +176,15 @@
         var hls = new window.Hls();
         hls.loadSource(HLS_SRC);
         hls.attachMedia(video);
+        hls.on(window.Hls.Events.ERROR, function (_evt, data) {
+          if (data && data.fatal) {
+            hls.destroy();
+            video.src = MP4_SRC;
+            if (started) video.play().catch(function () {});
+          }
+        });
+      } else {
+        video.src = MP4_SRC;
       }
     }
     attachSource();
