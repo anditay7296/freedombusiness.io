@@ -63,4 +63,11 @@ body.popup-open {
     right: 0;
     z-index: 50;
   }
+
+  /* Keep the fixed bar compact on phones — just the STEP #2 button and the
+     名额有限 badge. The date/time and countdown rows stay on desktop only. */
+  .clone-sticky-bar #col-hrOvxf0vY5,
+  .clone-sticky-bar #col-M2O9rZHT3n {
+    display: none !important;
+  }
 }

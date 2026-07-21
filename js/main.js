@@ -38,30 +38,46 @@
     if (e.key === 'Escape') closePopup();
   });
 
-  /* ---------- Countdown (GHL minute timer: 12s, hide on expire, auto-reset on revisit) ---------- */
-  var TIMER_SECONDS = 12;
-  document.querySelectorAll('.c-countdown').forEach(function (wrap) {
-    // the timer grid is client-rendered in GHL, so build it if missing
-    if (!wrap.querySelector('.timer-box')) {
-      var innerClass = 'c' + wrap.id.replace(/-timer-container$/, '');
-      var container = document.createElement('div');
-      container.className = innerClass;
-      container.innerHTML =
-        '<span><div id="' + wrap.id + '-timer-container" class="time-grid-3 ' + innerClass + ' time-grid-3">' +
-        '<div class="timer-box"><div class="count">0</div><div class="label">hours</div></div>' +
-        '<div class="timer-box"><div class="count">0</div><div class="label">minutes</div></div>' +
-        '<div class="timer-box"><div class="count">0</div><div class="label">seconds</div></div>' +
+  /* ---------- Webinar countdown (bottom bar) ---------- */
+  // Webinar start. EDIT THIS EACH COHORT — ISO 8601 including the +08:00 offset, so the
+  // countdown shows the correct remaining time to viewers in any timezone.
+  var WEBINAR_START = '2026-07-22T20:00:00+08:00';
+
+  var countdownWrap = document.getElementById('countdown-DAHiXj0Kmd');
+  if (countdownWrap) {
+    var target = new Date(WEBINAR_START).getTime();
+    var UNITS = ['days', 'hours', 'minutes', 'seconds'];
+
+    // GHL renders this grid client-side, so build it (reusing GHL's own time-grid-4 /
+    // timer-box classes, which the stylesheet already styles)
+    if (!countdownWrap.querySelector('.timer-box')) {
+      var inner = document.createElement('div');
+      inner.className = 'ccountdown-DAHiXj0Kmd';
+      inner.innerHTML = '<span><div id="countdown-DAHiXj0Kmd-timer-container" ' +
+        'class="time-grid-4 ccountdown-DAHiXj0Kmd">' +
+        UNITS.map(function (u) {
+          return '<div class="timer-box"><div class="count">0</div><div class="label">' + u + '</div></div>';
+        }).join('') +
         '</div></span>';
-      wrap.appendChild(container);
+      countdownWrap.appendChild(inner);
     }
-    var boxes = wrap.querySelectorAll('.timer-box .count');
-    if (boxes.length < 3) return;
-    // The live GHL page displays this timer as a static 0h 0m 12s (it never ticks),
-    // so the clone matches that observed behavior exactly.
-    boxes[0].textContent = Math.floor(TIMER_SECONDS / 3600);
-    boxes[1].textContent = Math.floor((TIMER_SECONDS % 3600) / 60);
-    boxes[2].textContent = TIMER_SECONDS % 60;
-  });
+
+    var counts = countdownWrap.querySelectorAll('.timer-box .count');
+    if (counts.length === 4) {
+      var tick = function () {
+        // recompute from the clock every tick, so a throttled/backgrounded tab stays accurate
+        var left = Math.max(0, Math.floor((target - Date.now()) / 1000));
+        counts[0].textContent = Math.floor(left / 86400);
+        counts[1].textContent = Math.floor((left % 86400) / 3600);
+        counts[2].textContent = Math.floor((left % 3600) / 60);
+        counts[3].textContent = left % 60;
+        // once it expires leave the zeros in place — the bar carries the STEP #2 CTA,
+        // which must stay on screen
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
+  }
 
   /* ---------- FAQ accordion ---------- */
   document.querySelectorAll('.hl-faq-child-heading').forEach(function (head) {
