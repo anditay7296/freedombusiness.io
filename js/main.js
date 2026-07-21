@@ -96,11 +96,14 @@
     if (!overlay || !slider) return;
 
     var dragging = false;
+    var ratio = null; // divider position as a fraction of the box, so it survives resize
 
     function slide(x) {
       var w = box.offsetWidth;
+      if (!w) return; // not laid out yet (hidden/zero-width) — writing 0px would collapse it
       if (x < 0) x = 0;
       if (x > w) x = w;
+      ratio = x / w;
       overlay.style.width = x + 'px';
       slider.style.left = (x - 1) + 'px';
     }
@@ -139,6 +142,16 @@
     // stop the browser's native image-drag ghost from hijacking the gesture
     cont.querySelectorAll('img').forEach(function (img) {
       img.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    });
+
+    // keep the divider where the user put it when the viewport changes (resize/rotate)
+    window.addEventListener('resize', function () {
+      if (ratio === null) return;
+      var w = box.offsetWidth;
+      if (!w) return;
+      var x = ratio * w;
+      overlay.style.width = x + 'px';
+      slider.style.left = (x - 1) + 'px';
     });
   });
 
