@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="38px" version="1.1" viewBox="0 0 206 38" width="206px">
+    <title>Arrows-Down</title>
+    <g fill="none" fill-rule="evenodd" id="Page-1" stroke="none" stroke-width="1">
+        <g fill="#019EFA" fill-rule="nonzero" id="Artboard" transform="translate(-860, -93)">
+            <g id="Arrows-Down" transform="translate(860, 93)">
+                <circle cx="2.5" cy="2.5" id="Oval" r="2.5"/>
+                <circle cx="8.5" cy="8.5" id="Oval" r="2.5"/>
+                <circle cx="15.5" cy="15.5" id="Oval" r="2.5"/>
+                <circle cx="21.5" cy="21.5" id="Oval" r="2.5"/>
+                <circle cx="27.5" cy="15.5" id="Oval" r="2.5"/>
+                <circle cx="33.5" cy="8.5" id="Oval" r="2.5"/>
+                <circle cx="40.5" cy="2.5" id="Oval" r="2.5"/>
+                <circle cx="40.5" cy="16.5" id="Oval" r="2.5"/>
+                <circle cx="2.5" cy="16.5" id="Oval" r="2.5"/>
+                <circle cx="8.5" cy="22.5" id="Oval" r="2.5"/>
+                <circle cx="15.5" cy="29.5" id="Oval" r="2.5"/>
+                <circle cx="21.5" cy="35.5" id="Oval" r="2.5"/>
+                <circle cx="27.5" cy="29.5" id="Oval" r="2.5"/>
+                <circle cx="33.5" cy="22.5" id="Oval" r="2.5"/>
+                <circle cx="84.5" cy="2.5" id="Oval" r="2.5"/>
+                <circle cx="90.5" cy="8.5" id="Oval" r="2.5"/>
+                <circle cx="96.5" cy="15.5" id="Oval" r="2.5"/>
+                <circle cx="103.5" cy="21.5" id="Oval" r="2.5"/>
+                <circle cx="109.5" cy="15.5" id="Oval" r="2.5"/>
+                <circle cx="115.5" cy="8.5" id="Oval" r="2.5"/>
+                <circle cx="122.5" cy="2.5" id="Oval" r="2.5"/>
+                <circle cx="122.5" cy="16.5" id="Oval" r="2.5"/>
+                <circle cx="84.5" cy="16.5" id="Oval" r="2.5"/>
+                <circle cx="90.5" cy="22.5" id="Oval" r="2.5"/>
+                <circle cx="96.5" cy="29.5" id="Oval" r="2.5"/>
+                <circle cx="103.5" cy="35.5" id="Oval" r="2.5"/>
+                <circle cx="109.5" cy="29.5" id="Oval" r="2.5"/>
+                <circle cx="115.5" cy="22.5" id="Oval" r="2.5"/>
+                <circle cx="165.5" cy="2.5" id="Oval" r="2.5"/>
+                <circle cx="172.5" cy="8.5" id="Oval" r="2.5"/>
+                <circle cx="178.5" cy="15.5" id="Oval" r="2.5"/>
+                <circle cx="184.5" cy="21.5" id="Oval" r="2.5"/>
+                <circle cx="190.5" cy="15.5" id="Oval" r="2.5"/>
+                <circle cx="197.5" cy="8.5" id="Oval" r="2.5"/>
+                <circle cx="203.5" cy="2.5" id="Oval" r="2.5"/>
+                <circle cx="203.5" cy="16.5" id="Oval" r="2.5"/>
+                <circle cx="165.5" cy="16.5" id="Oval" r="2.5"/>
+                <circle cx="172.5" cy="22.5" id="Oval" r="2.5"/>
+                <circle cx="178.5" cy="29.5" id="Oval" r="2.5"/>
+                <circle cx="184.5" cy="35.5" id="Oval" r="2.5"/>
+                <circle cx="190.5" cy="29.5" id="Oval" r="2.5"/>
+                <circle cx="197.5" cy="22.5" id="Oval" r="2.5"/>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,70 @@
+/* Small overrides for the static clone (popup + video player) */
+
+body.popup-open {
+  overflow: hidden;
+}
+
+/* GHL form iframe inside the popup */
+.cform-eUKP5_5Gaa iframe {
+  display: block;
+  width: 100%;
+  min-height: 420px;
+}
+
+/* Hosted video player (replaces the GHL Vue video widget) — overlays the
+   thumbnail box that defines the widget's aspect-ratio height */
+.clone-video-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.clone-video-player video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  background: transparent;
+}
+
+.clone-enable-sound {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 3;
+  font-family: inherit;
+}
+
+.clone-enable-sound:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+/* Mobile-only sticky bottom CTA bar ("免费继续 STEP #2") — on the live GHL page
+   this section is display:none on desktop and fixed to the viewport bottom on mobile */
+@media screen and (min-width: 481px) {
+  .clone-sticky-bar {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .clone-sticky-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+  }
+}
