@@ -39,13 +39,29 @@
   });
 
   /* ---------- Webinar countdown (bottom bar) ---------- */
-  // Webinar start. EDIT THIS EACH COHORT — ISO 8601 including the +08:00 offset, so the
-  // countdown shows the correct remaining time to viewers in any timezone.
-  var WEBINAR_START = '2026-07-22T20:00:00+08:00';
+  // Evergreen: always counts down to the NEXT webinar rather than one fixed date, so it
+  // never expires and needs no upkeep between cohorts. The page advertises 星期三 & 四,
+  // 8PM-11PM (GMT+8), so the target is the next Wednesday 20:00 Malaysia time.
+  // To move the webinar to a different day/time, change these two values.
+  var WEBINAR_DAY_UTC = 3;   // 0=Sun. Wed 20:00 +08 is still Wednesday in UTC.
+  var WEBINAR_HOUR_UTC = 12; // 20:00 in GMT+8 == 12:00 UTC
+
+  // Working in UTC keeps this correct for visitors in any timezone, and sidesteps the
+  // viewer's own DST/offset entirely. `nowMs` is injectable so the roll-over is testable.
+  function nextWebinarStart(nowMs) {
+    var now = typeof nowMs === 'number' ? nowMs : Date.now();
+    var d = new Date(now);
+    var t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), WEBINAR_HOUR_UTC, 0, 0, 0);
+    // advance to the target weekday
+    t += ((WEBINAR_DAY_UTC - new Date(t).getUTCDay() + 7) % 7) * 864e5;
+    // if that instant has already passed, roll to next week
+    if (t <= now) t += 7 * 864e5;
+    return t;
+  }
+  window.nextWebinarStart = nextWebinarStart; // exposed so the roll-over can be verified
 
   var countdownWrap = document.getElementById('countdown-DAHiXj0Kmd');
   if (countdownWrap) {
-    var target = new Date(WEBINAR_START).getTime();
     var UNITS = ['days', 'hours', 'minutes', 'seconds'];
 
     // GHL renders this grid client-side, so build it (reusing GHL's own time-grid-4 /
@@ -65,14 +81,13 @@
     var counts = countdownWrap.querySelectorAll('.timer-box .count');
     if (counts.length === 4) {
       var tick = function () {
-        // recompute from the clock every tick, so a throttled/backgrounded tab stays accurate
-        var left = Math.max(0, Math.floor((target - Date.now()) / 1000));
+        // resolve the target every tick: keeps a throttled/backgrounded tab accurate, and
+        // rolls straight on to next week's webinar the moment this one starts
+        var left = Math.max(0, Math.floor((nextWebinarStart() - Date.now()) / 1000));
         counts[0].textContent = Math.floor(left / 86400);
         counts[1].textContent = Math.floor((left % 86400) / 3600);
         counts[2].textContent = Math.floor((left % 3600) / 60);
         counts[3].textContent = left % 60;
-        // once it expires leave the zeros in place — the bar carries the STEP #2 CTA,
-        // which must stay on screen
       };
       tick();
       setInterval(tick, 1000);
