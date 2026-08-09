@@ -71,3 +71,29 @@ body.popup-open {
     display: none !important;
   }
 }
+
+/* Section "除非你…". The 可是今天有 AI… heading and its comparison image used to
+   sit in a second 50% column beside the copy; they now follow the last
+   testimonial inline, so this column is the row's only child.
+   Left alone it would stretch to the full row (.c-column carries
+   `flex:1 1 auto!important`), which blows the comparison image up to its 1080px
+   natural size. Pin it back to 50% and centre it, so the copy's line length and
+   every image keep the size they had. Desktop only — below 768px GHL already
+   stacks columns at 100% width, and that layout is already correct. */
+@media screen and (min-width: 768px) {
+  .hl_page-preview--content .col-PCmOzJqgJP {
+    flex: 0 0 50% !important;
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Both columns carried `padding: 10px 5px`, so while they were stacked on mobile
+   the gap above 可是今天有 AI… included the first column's 10px bottom padding plus
+   the second's 10px top padding. Folding the block into one column dropped that
+   20px. Add it back on top of the heading's own 20px margin, so mobile spacing is
+   unchanged and desktop gets the same separation. */
+.hl_page-preview--content #sub-heading-9SM9DJ-yYe {
+  margin-top: 40px;
+}
