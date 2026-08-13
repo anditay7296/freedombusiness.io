@@ -95,6 +95,22 @@ body.popup-open {
   }
 }
 
+/* Closing section: the gold-records photo and its 41% column were removed, leaving
+   the text column alone in the row. Same flex trap as above — pin it to its 59% and
+   centre it, so the awards photo, headline and CTA keep their existing size rather
+   than stretching across the whole card. Its padding is 20px left / 5px right, so
+   even out the horizontal padding too or the content sits off-centre. */
+@media screen and (min-width: 768px) {
+  .hl_page-preview--content .col-yNACPA9dya {
+    flex: 0 0 59% !important;
+    max-width: 59%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
 /* Both columns carried `padding: 10px 5px`, so while they were stacked on mobile
    the gap above 可是今天有 AI… included the first column's 10px bottom padding plus
    the second's 10px top padding. Folding the block into one column dropped that
