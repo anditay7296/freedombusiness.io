@@ -65,11 +65,17 @@ body.popup-open {
   }
 
   /* Keep the fixed bar compact on phones — just the STEP #2 button and the
-     名额有限 badge. The date/time and countdown rows stay on desktop only. */
-  .clone-sticky-bar #col-hrOvxf0vY5,
-  .clone-sticky-bar #col-M2O9rZHT3n {
+     名额有限 badge. The date/time row stays on desktop only. */
+  .clone-sticky-bar #col-hrOvxf0vY5 {
     display: none !important;
   }
+}
+
+/* Centre the bar's 日期 / 时间 lines. Its base rule is text-align:left, and GHL only
+   centred it under 480px — a width where this column is hidden anyway — so it read
+   left-aligned everywhere it was actually visible. */
+.hl_page-preview--content .csub-heading-jq6o7lWm90 {
+  text-align: center;
 }
 
 /* Section "除非你…". The 可是今天有 AI… heading and its comparison image used to
