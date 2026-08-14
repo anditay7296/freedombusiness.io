@@ -42,6 +42,51 @@
      was removed on request, and the footer minute-timer before it, so the timer code
      that used to live here is gone with them. */
 
+  /* ---------- Awards timeline: scroll progress fill along the dot-to-dot line ---------- */
+  (function () {
+    var rows = document.querySelectorAll('.timeline-row');
+    if (!rows.length) return;
+    var firstC = rows[0].querySelector('.timeline_centre');
+    var lastC = rows[rows.length - 1].querySelector('.timeline_centre');
+    var section = rows[0].closest('.c-section');
+    if (!firstC || !lastC || !section) return;
+
+    var fill = document.createElement('div');
+    fill.className = 'tl-fill';
+    section.style.position = 'relative';
+    section.appendChild(fill);
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var secBox = section.getBoundingClientRect();
+      var fBox = firstC.getBoundingClientRect();
+      var lBox = lastC.getBoundingClientRect();
+      // track runs from the first diamond's resting point to the last column's end
+      var trackTop = fBox.top - secBox.top + 26;
+      var trackBottom = lBox.bottom - secBox.top - 26;
+      var x = fBox.left - secBox.left + fBox.width / 2;
+      // the diamonds pin at 48% viewport height; the fill's tip meets them there
+      var tip = window.innerHeight * 0.48 + 14 - secBox.top;
+      var height = Math.max(0, Math.min(tip, trackBottom) - trackTop);
+      fill.style.left = (x - 1.5) + 'px';
+      fill.style.top = trackTop + 'px';
+      fill.style.height = height + 'px';
+    }
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+    // belt-and-braces: lazy images shift layout and the odd scroll event gets
+    // dropped on some browsers — a slow refresh keeps the fill honest
+    setInterval(update, 300);
+  })();
+
   /* ---------- 30 天计划的里程碑: staggered card reveal on scroll ---------- */
   var msCards = document.querySelectorAll('.ms-card');
   if (msCards.length && 'IntersectionObserver' in window) {

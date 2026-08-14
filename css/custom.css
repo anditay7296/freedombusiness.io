@@ -337,6 +337,20 @@ body.popup-open {
 /* last row: line stops at the diamond, not below it */
 #row-24a7n-QMZZAU .timeline_centre::before { bottom: auto; height: 26px; }
 
+/* Scroll progress fill (rebuilt from the original page's .timeline_progress-bar,
+   which its custom JS injected): a brand-gradient line that grows down the track
+   as you scroll, its tip always meeting the diamond pinned at 48% viewport —
+   so the dot visibly travels dot-to-dot with the bright line following it.
+   Sized and positioned by main.js. */
+.tl-fill {
+  position: absolute;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #7F37FD, #F40DE7);
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* Awards timeline (Reeve & Jackson 成绩单): the original page's custom JS dimmed
    every .timeline-row to opacity .3 and spotlighted only the row nearest the
    viewport centre while scrolling. That script went with the GHL runtime, so the
