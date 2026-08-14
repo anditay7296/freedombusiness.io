@@ -271,6 +271,7 @@ body.popup-open {
 .hl_page-preview--content .button-gbmKvV9Vs0 {
   text-align: center;
   margin-right: 0;
+  margin-bottom: 0; /* was 20px — user wants the 名额有限 badge right under the button */
 }
 
 /* ---- CTA button effect, replicated from hannsenbeauty.com ----
