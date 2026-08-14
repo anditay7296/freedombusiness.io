@@ -62,6 +62,13 @@ body.popup-open {
     left: 0;
     right: 0;
     z-index: 50;
+    /* Sit flush with the physical bottom of the screen. Paired with
+       viewport-fit=cover on the viewport meta, this lets the bar's dark
+       background fill the home-indicator area on notched iPhones — otherwise the
+       page background shows through as a pale strip under the bar. The padding
+       keeps the button itself clear of the home indicator. Resolves to 0 on
+       devices with no inset, so nothing changes elsewhere. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   /* Keep the fixed bar compact on phones — just the STEP #2 button and the
@@ -69,12 +76,40 @@ body.popup-open {
   .clone-sticky-bar #col-hrOvxf0vY5 {
     display: none !important;
   }
+
+  /* Tighten the fixed bar: the badge widget carries an empty text row and generous
+     paddings that left a band of dead space under the caption. */
+  .clone-sticky-bar .cimage-feature-twMhMLR1Ce {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .clone-sticky-bar #image-feature-twMhMLR1Ce .featureText {
+    display: none; /* empty <p> that still takes a line of height */
+  }
+
+  .clone-sticky-bar #image-feature-twMhMLR1Ce {
+    margin-bottom: 0;
+  }
+
+  .clone-sticky-bar #row-V-EJ36v0ir {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
 }
 
 /* Centre the bar's 日期 / 时间 lines. Its base rule is text-align:left, and GHL only
    centred it under 480px — a width where this column is hidden anyway — so it read
    left-aligned everywhere it was actually visible. */
 .hl_page-preview--content .csub-heading-jq6o7lWm90 {
+  text-align: center;
+}
+
+/* Centre the bar's 名额有限！Webinar 只能 300人加入 badge. Its avatars were already
+   centred but the caption was text-align:left, so the line sat off to one side.
+   The matching badge inside the card above (cimage-feature-98lHlj1mvN) is already
+   centred by GHL — this only fixes the one in the bar. */
+.hl_page-preview--content .cimage-feature-twMhMLR1Ce {
   text-align: center;
 }
 
@@ -93,6 +128,82 @@ body.popup-open {
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+/* Closing section: centre the 把握机会 line and the 免费VIP培训 button. Both carry
+   text-align:left from GHL (the paragraph shares a grouped rule with the headline,
+   so target only the paragraph); the button wrapper also had margin-right:40px,
+   which would keep it off-centre even once text-align is fixed. */
+.hl_page-preview--content .cparagraph-tGZ6gIO0sZ {
+  text-align: center;
+}
+
+.hl_page-preview--content .button-gbmKvV9Vs0 {
+  text-align: center;
+  margin-right: 0;
+}
+
+/* ---- CTA button effect, replicated from hannsenbeauty.com ----
+   Replaces GHL's flashing white pulse (pulse 1.5s infinite) on every
+   .btn-green-gradient CTA with hannsen's calmer combination, copied exactly:
+   a gold-sheen sweep (::before, 3.4s), a soft expanding pulse ring (::after,
+   2.6s), lift on hover, squash on click. Timings, gradients and easings are
+   verbatim from their stylesheet; only the ring/glow colour is white instead of
+   their gold, to match this page's purple gradient buttons. */
+.btn-green-gradient,
+.btn-green-gradient button,
+.btn-green-gradient a,
+.c-button .btn-green-gradient,
+.c-button button.btn-green-gradient,
+.c-button a.btn-green-gradient {
+  animation: none !important;
+  -webkit-animation: none !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.c-button .btn-green-gradient::before {
+  /* sheen sweep */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.45) 50%, transparent 58%);
+  background-size: 240% 100%;
+  background-position: 180% 0;
+  background-repeat: no-repeat;
+  animation: hb-sheen 3.4s ease-in-out infinite;
+}
+
+.c-button .btn-green-gradient::after {
+  /* soft pulse ring */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45);
+  animation: hb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.c-button .btn-green-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4), 0 0 26px rgba(255, 255, 255, 0.35) !important;
+}
+
+.c-button .btn-green-gradient:active {
+  transform: scale(0.97);
+}
+
+@keyframes hb-sheen {
+  0%, 55% { background-position: 180% 0; }
+  90%, 100% { background-position: -80% 0; }
+}
+
+@keyframes hb-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 0 14px rgba(255, 255, 255, 0); }
 }
 
 /* Closing section: the gold-records photo and its 41% column were removed, leaving
