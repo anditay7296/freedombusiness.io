@@ -108,6 +108,109 @@ body.popup-open {
   display: none;
 }
 
+/* ---- 30 天计划的里程碑 (design after payout-blueprint.com's milestone cards) ---- */
+.ms30-wrap {
+  background: var(--color-lo7lr5b2, #0d0d2b);
+  padding: 46px 20px 54px;
+  border-radius: 26px;   /* sits inline in a white section, so render as a panel */
+  margin: 26px 0 34px;
+}
+
+.ms30 { max-width: 860px; margin: 0 auto; font-family: var(--contentfont, 'Noto Sans'), sans-serif; }
+
+.ms-title {
+  color: #fff;
+  text-align: center;
+  font-family: var(--headlinefont, 'Space Grotesk'), sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 30px;
+}
+
+.ms-card {
+  background: linear-gradient(160deg, #f7f9ff 0%, #e8ecf7 100%);
+  border-radius: 18px;
+  padding: 20px 22px 18px;
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* hidden state is applied by JS (ms-prep), so cards can never be stuck invisible
+   if the observer misbehaves; a timer in main.js also force-reveals as insurance */
+.ms-card.ms-prep { opacity: 0; transform: translateY(22px); }
+.ms-card.ms-in { opacity: 1; transform: none; }
+
+.ms-head { display: flex; align-items: center; gap: 14px; }
+.ms-ico {
+  flex: 0 0 46px; width: 46px; height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(150deg, #2b4bdd, #1d33a8);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 18px -8px rgba(43, 75, 221, 0.7);
+}
+.ms-ico svg { width: 26px; height: 26px; }
+.ms-headtxt { flex: 1 1 auto; min-width: 0; }
+.ms-label { color: #2b4bdd; font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+.ms-range {
+  color: #101b53;
+  font-family: var(--headlinefont, 'Space Grotesk'), sans-serif;
+  font-size: 30px; font-weight: 800; line-height: 1.1;
+}
+.ms-dots { display: flex; gap: 7px; align-self: flex-start; padding-top: 6px; }
+.ms-dots i { width: 9px; height: 9px; border-radius: 50%; background: #c3cbe8; }
+.ms-dots i.ms-dot-on { background: #2b4bdd; }
+
+.ms-div { height: 1px; background: #cdd4ea; margin: 16px 0; }
+
+.ms-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #e2e7f5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.ms-row:last-child { margin-bottom: 0; }
+.ms-check {
+  flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%;
+  background: #12a150; display: inline-flex; align-items: center; justify-content: center;
+}
+.ms-check svg { width: 14px; height: 14px; }
+.ms-rowtxt { color: #101b53; font-weight: 700; font-size: 16.5px; }
+.ms-chip {
+  border: 1.5px solid #23306b; color: #23306b;
+  border-radius: 999px; padding: 4px 14px;
+  font-size: 14px; font-weight: 700; white-space: nowrap;
+}
+
+.ms-pay {
+  display: flex; align-items: center; gap: 14px;
+  background: #eef3ee;
+  border: 1px solid #dbe6db;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.ms-pay:last-child { margin-bottom: 0; }
+.ms-coins { flex: 0 0 30px; width: 30px; height: 30px; }
+.ms-coins svg { width: 30px; height: 30px; }
+.ms-paylab { color: #245c38; font-size: 13px; font-weight: 800; letter-spacing: 0.06em; }
+.ms-payamt {
+  color: #1ea34d;
+  font-family: var(--headlinefont, 'Space Grotesk'), sans-serif;
+  font-size: 30px; font-weight: 800; line-height: 1.1;
+}
+
+.ms-chev { text-align: center; padding: 10px 0; line-height: 0; }
+
+@media screen and (max-width: 480px) {
+  .ms30-wrap { padding: 34px 14px 40px; }
+  .ms-title { font-size: 26px; margin-bottom: 22px; }
+  .ms-card { padding: 16px 14px 14px; }
+  .ms-range { font-size: 24px; }
+  .ms-rowtxt { font-size: 15px; }
+  .ms-payamt { font-size: 25px; }
+}
+
 /* ---- Animated USD conversion cards (js/fx-cards.js) ----
    Live HTML/SVG replicas of the three Google currency screenshots: the traced
    green line draws itself left to right and the rate counts up on scroll. */

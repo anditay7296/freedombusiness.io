@@ -42,6 +42,29 @@
      was removed on request, and the footer minute-timer before it, so the timer code
      that used to live here is gone with them. */
 
+  /* ---------- 30 天计划的里程碑: staggered card reveal on scroll ---------- */
+  var msCards = document.querySelectorAll('.ms-card');
+  if (msCards.length && 'IntersectionObserver' in window) {
+    var msReveal = function (c) {
+      c.classList.add('ms-in');
+      c.classList.remove('ms-prep');
+    };
+    var msIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        msReveal(entry.target);
+        msIO.unobserve(entry.target);
+      });
+    }, { threshold: 0.2 });
+    msCards.forEach(function (c, i) {
+      c.classList.add('ms-prep'); // hidden state only once JS is in charge of revealing
+      c.style.transitionDelay = (i * 0.12) + 's';
+      msIO.observe(c);
+    });
+    // insurance: whatever happens with the observer, nothing stays hidden
+    setTimeout(function () { msCards.forEach(msReveal); }, 4000);
+  }
+
   /* ---------- FAQ accordion ---------- */
   document.querySelectorAll('.hl-faq-child-heading').forEach(function (head) {
     head.style.cursor = 'pointer';
