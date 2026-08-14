@@ -101,8 +101,11 @@ body.popup-open {
   margin-bottom: 0;
 }
 
-.clone-sticky-bar #image-feature-twMhMLR1Ce .featureText {
-  display: none; /* empty <p> that still takes a line of height */
+.clone-sticky-bar #image-feature-twMhMLR1Ce .featureText,
+#image-feature-98lHlj1mvN .featureText {
+  /* empty <p> that still takes a line of height — in the card badge it also
+     pushed the visible caption above the avatars' centre line */
+  display: none;
 }
 
 /* Both 名额有限 badges (closing card + bottom bar): keep the avatars and the
