@@ -105,6 +105,30 @@ body.popup-open {
   display: none; /* empty <p> that still takes a line of height */
 }
 
+/* Both 名额有限 badges (closing card + bottom bar): keep the avatars and the
+   caption on ONE line at every width. GHL's mobile rules set the avatar
+   container to width:100%, stacking it above the text under 480px; flex with
+   auto widths keeps them side by side and centres the pair as a unit. */
+.image-feature-98lHlj1mvN .img-feature-container,
+.image-feature-twMhMLR1Ce .img-feature-container {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-feature-98lHlj1mvN .img-feature-container .img-container,
+.image-feature-twMhMLR1Ce .img-feature-container .img-container,
+.image-feature-98lHlj1mvN .img-feature-container .txt-container,
+.image-feature-twMhMLR1Ce .img-feature-container .txt-container {
+  width: auto !important;
+  float: none !important;
+}
+
+.image-feature-98lHlj1mvN .img-feature-container .img-container,
+.image-feature-twMhMLR1Ce .img-feature-container .img-container {
+  margin-right: 8px;
+}
+
 /* Centre the bar's 日期 / 时间 lines. Its base rule is text-align:left, and GHL only
    centred it under 480px — a width where this column is hidden anyway — so it read
    left-aligned everywhere it was actually visible. */
