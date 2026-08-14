@@ -84,10 +84,6 @@ body.popup-open {
     padding-bottom: 0;
   }
 
-  .clone-sticky-bar #image-feature-twMhMLR1Ce .featureText {
-    display: none; /* empty <p> that still takes a line of height */
-  }
-
   .clone-sticky-bar #image-feature-twMhMLR1Ce {
     margin-bottom: 0;
   }
@@ -96,6 +92,17 @@ body.popup-open {
     padding-top: 2px;
     padding-bottom: 2px;
   }
+}
+
+/* Bar, all widths: no gap between the STEP #2 button and the 名额有限 badge.
+   The button wrapper carried margin-bottom:20px on desktop (mobile was already 0),
+   and the badge widget drags an empty featureText <p> that adds a line of height. */
+.clone-sticky-bar #button-0GUydkHeP5 {
+  margin-bottom: 0;
+}
+
+.clone-sticky-bar #image-feature-twMhMLR1Ce .featureText {
+  display: none; /* empty <p> that still takes a line of height */
 }
 
 /* Centre the bar's 日期 / 时间 lines. Its base rule is text-align:left, and GHL only
@@ -130,10 +137,13 @@ body.popup-open {
   }
 }
 
-/* Closing section: centre the 把握机会 line and the 免费VIP培训 button. Both carry
-   text-align:left from GHL (the paragraph shares a grouped rule with the headline,
-   so target only the paragraph); the button wrapper also had margin-right:40px,
-   which would keep it off-centre even once text-align is fixed. */
+/* Closing section: centre the whole text stack — the 最新今年趋势 label, the
+   其实你也可以透过 A.I. headline, the 把握机会 line and the 免费VIP培训 button. GHL
+   set them all text-align:left on desktop and only centred them under 480px; the
+   button wrapper also had margin-right:40px, which would keep it off-centre even
+   once text-align is fixed. */
+.hl_page-preview--content .csub-heading-p4yYrkPyui,
+.hl_page-preview--content .cheading-ThcsENoh2K,
 .hl_page-preview--content .cparagraph-tGZ6gIO0sZ {
   text-align: center;
 }
