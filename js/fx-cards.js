@@ -101,11 +101,7 @@
     var chart = buildChart(cfg);
     var plotBox = el('div', 'fx-plotbox');
     plotBox.appendChild(chart.svg);
-    cfg.xlab.forEach(function (x) {
-      var lab = el('span', 'fx-xlab', x[0]);
-      lab.style.left = x[1] + '%';
-      plotBox.appendChild(lab);
-    });
+    // x-axis date labels intentionally not rendered (removed at user request)
     chartWrap.appendChild(plotBox);
     right.appendChild(chartWrap);
 
