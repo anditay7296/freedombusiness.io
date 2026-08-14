@@ -108,6 +108,25 @@ body.popup-open {
   display: none;
 }
 
+/* Keep each CTA's arrow icon on the same line as its label ("…$2-3k美金 →").
+   GHL lays the label and icon out as separate inline-blocks, so once the label
+   nearly fills the button the arrow drops to its own line. */
+.main-heading-group {
+  white-space: nowrap;
+}
+
+/* The two buttons whose generous side padding would then push them past their
+   container get it trimmed just enough to fit the label and arrow on one line. */
+.hl_page-preview--content .cbutton-tj_gdAD2mJv {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .hl_page-preview--content .cbutton-tj_gdAD2mJv { padding: 15px 24px; }
+  .hl_page-preview--content .cbutton-eJsjjoLnHR { padding: 15px 14px; }
+}
+
 /* ---- 30 天计划的里程碑 (design after payout-blueprint.com's milestone cards) ---- */
 .ms30-wrap {
   background: var(--color-lo7lr5b2, #0d0d2b);
