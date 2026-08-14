@@ -121,10 +121,19 @@ body.popup-open {
 .ms-title {
   color: #fff;
   text-align: center;
-  font-family: var(--headlinefont, 'Space Grotesk'), sans-serif;
+  font-family: var(--headlinefont, 'Inter'), sans-serif;
   font-size: 34px;
   font-weight: 700;
   margin: 0 0 30px;
+}
+
+/* brand gradient accent, same recipe as the page's .text-highlight em */
+.ms-title em {
+  background: linear-gradient(92.22deg, #D75EC4 -1.44%, #7459FE 63%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: normal;
 }
 
 .ms-card {
@@ -143,21 +152,27 @@ body.popup-open {
 .ms-ico {
   flex: 0 0 46px; width: 46px; height: 46px;
   border-radius: 12px;
-  background: linear-gradient(150deg, #2b4bdd, #1d33a8);
+  background: linear-gradient(86.61deg, #7F37FD 6.68%, #F40DE7 94.28%);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 18px -8px rgba(43, 75, 221, 0.7);
+  box-shadow: 0 8px 18px -8px rgba(127, 55, 253, 0.7);
 }
 .ms-ico svg { width: 26px; height: 26px; }
 .ms-headtxt { flex: 1 1 auto; min-width: 0; }
-.ms-label { color: #2b4bdd; font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+.ms-label {
+  font-weight: 700; font-size: 15px; margin-bottom: 2px;
+  background: linear-gradient(92.22deg, #D75EC4 -1.44%, #7459FE 63%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 .ms-range {
-  color: #101b53;
+  color: #170f3e;
   font-family: var(--headlinefont, 'Space Grotesk'), sans-serif;
   font-size: 30px; font-weight: 800; line-height: 1.1;
 }
 .ms-dots { display: flex; gap: 7px; align-self: flex-start; padding-top: 6px; }
-.ms-dots i { width: 9px; height: 9px; border-radius: 50%; background: #c3cbe8; }
-.ms-dots i.ms-dot-on { background: #2b4bdd; }
+.ms-dots i { width: 9px; height: 9px; border-radius: 50%; background: #ddd2fb; }
+.ms-dots i.ms-dot-on { background: #7F37FD; }
 
 .ms-div { height: 1px; background: #cdd4ea; margin: 16px 0; }
 
@@ -175,9 +190,9 @@ body.popup-open {
   background: #12a150; display: inline-flex; align-items: center; justify-content: center;
 }
 .ms-check svg { width: 14px; height: 14px; }
-.ms-rowtxt { color: #101b53; font-weight: 700; font-size: 16.5px; }
+.ms-rowtxt { color: #170f3e; font-weight: 700; font-size: 16.5px; }
 .ms-chip {
-  border: 1.5px solid #23306b; color: #23306b;
+  border: 1.5px solid #7459FE; color: #7459FE;
   border-radius: 999px; padding: 4px 14px;
   font-size: 14px; font-weight: 700; white-space: nowrap;
 }
