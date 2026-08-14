@@ -289,6 +289,39 @@ body.popup-open {
   .fx-share { top: 14px; right: 14px; }
 }
 
+/* Awards timeline: vertical connector line running dot-to-dot through the
+   diamond column (the original page injected a .timeline_progress track at
+   runtime; this recreates it in pure CSS). Each row draws its own segment,
+   over-extended to bridge the gap to the neighbouring row; the first and last
+   rows are trimmed so the line starts at the first diamond and stops at the
+   last one. The diamond itself sits on a higher layer. */
+.timeline-row .timeline_centre {
+  position: relative;
+}
+
+.timeline-row .timeline_centre::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(124, 58, 237, 0.30);
+  z-index: 0;
+}
+
+.timeline-row .timeline_centre > .inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* first row: line starts at the diamond, not above it */
+#row-DSlpg6ldeTgX .timeline_centre::before { top: 26px; }
+/* last row: line stops at the diamond, not below it */
+#row-24a7n-QMZZAU .timeline_centre::before { bottom: auto; height: 26px; }
+
 /* Awards timeline (Reeve & Jackson 成绩单): the original page's custom JS dimmed
    every .timeline-row to opacity .3 and spotlighted only the row nearest the
    viewport centre while scrolling. That script went with the GHL runtime, so the
