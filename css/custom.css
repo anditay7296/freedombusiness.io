@@ -108,6 +108,13 @@ body.popup-open {
   display: none;
 }
 
+/* The awards photo carried margin-top:-50px on mobile — an overlap tweak from
+   its original spot in the deleted right-hand column. Now that it sits directly
+   under the 名额有限 badge, that pull-up covered the badge text. */
+.hl_page-preview--content .image-4JJvKXBEEj {
+  margin-top: 0 !important;
+}
+
 /* Both 名额有限 badges (closing card + bottom bar): keep the avatars and the
    caption on ONE line at every width. GHL's mobile rules set the avatar
    container to width:100%, stacking it above the text under 480px; flex with
