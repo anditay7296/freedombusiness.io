@@ -108,6 +108,92 @@ body.popup-open {
   display: none;
 }
 
+/* ---- Animated USD conversion cards (js/fx-cards.js) ----
+   Live HTML/SVG replicas of the three Google currency screenshots: the traced
+   green line draws itself left to right and the rate counts up on scroll. */
+.fx-card {
+  position: relative;
+  display: flex;
+  gap: 28px;
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 22px 26px 26px;
+  font-family: Roboto, Arial, sans-serif;
+  color: #202124;
+  text-align: left;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.fx-left { flex: 0 0 46%; min-width: 0; }
+.fx-right { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+.fx-share { position: absolute; top: 20px; right: 22px; }
+
+.fx-eyebrow { font-size: 16px; color: #202124; margin-bottom: 2px; }
+
+.fx-big { font-size: 42px; line-height: 1.15; font-weight: 400; margin: 4px 0 6px; }
+
+.fx-meta { font-size: 12.5px; color: #70757a; margin-bottom: 18px; }
+.fx-dis { color: #70757a; text-decoration: underline; text-underline-offset: 2px; }
+
+.fx-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  padding: 13px 14px;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.fx-box .fx-cur { color: #202124; display: inline-flex; align-items: center; gap: 8px; }
+.fx-caret {
+  width: 0; height: 0; display: inline-block;
+  border-left: 5px solid transparent; border-right: 5px solid transparent;
+  border-top: 6px solid #5f6368;
+}
+
+.fx-tabs { display: flex; gap: 4px; justify-content: space-between; margin: 2px 40px 14px 44px; }
+.fx-tab { font-size: 14px; color: #3c4043; padding: 6px 10px; border-radius: 14px; }
+.fx-tab-on { color: #1a73e8; background: #e8f0fe; }
+
+.fx-chart { display: flex; flex: 1 1 auto; }
+.fx-ylabs {
+  display: flex; flex-direction: column; justify-content: space-between;
+  font-size: 12.5px; color: #444746; padding: 0 10px 22px 0; text-align: right;
+}
+.fx-plotbox { position: relative; flex: 1 1 auto; padding-bottom: 22px; min-width: 0; }
+.fx-plot { width: 100%; height: 100%; min-height: 170px; display: block; overflow: visible; }
+.fx-grid { stroke: #e8eaed; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.fx-line {
+  fill: none; stroke: #34a853; stroke-width: 2.5;
+  vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round;
+}
+.fx-dot { fill: #34a853; opacity: 0; transition: opacity .35s ease; }
+.fx-dot-on { opacity: 1; }
+.fx-xlab {
+  position: absolute; bottom: 0; transform: translateX(-50%);
+  font-size: 12.5px; color: #444746;
+}
+
+@media screen and (max-width: 640px) {
+  .fx-card { flex-direction: column; gap: 10px; padding: 16px 16px 20px; }
+  .fx-left { flex: none; }
+  .fx-big { font-size: 30px; }
+  .fx-tabs { margin-left: 0; }
+  .fx-share { top: 14px; right: 14px; }
+}
+
+/* Awards timeline (Reeve & Jackson 成绩单): the original page's custom JS dimmed
+   every .timeline-row to opacity .3 and spotlighted only the row nearest the
+   viewport centre while scrolling. That script went with the GHL runtime, so the
+   rows were stuck dim. Show them all at full opacity instead (user's call). */
+.timeline-row {
+  opacity: 1 !important;
+}
+
 /* The awards photo carried margin-top:-50px on mobile — an overlap tweak from
    its original spot in the deleted right-hand column. Now that it sits directly
    under the 名额有限 badge, that pull-up covered the badge text. */
