@@ -113,7 +113,11 @@ body.popup-open {
   background: var(--color-lo7lr5b2, #0d0d2b);
   padding: 46px 20px 54px;
   border-radius: 26px;   /* sits inline in a white section, so render as a panel */
-  margin: 26px 0 34px;
+  margin: 26px 0 64px;   /* generous gap so the YES button clears the panel's arc */
+  /* the GHL column's .inner is a flex column; without this the panel gets
+     flex-shrunk and its content overflows onto the button below it */
+  flex: none;
+  width: 100%;
 }
 
 .ms30 { max-width: 860px; margin: 0 auto; font-family: var(--contentfont, 'Noto Sans'), sans-serif; }
