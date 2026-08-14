@@ -249,6 +249,62 @@ body.popup-open {
   .ms-payamt { font-size: 25px; }
 }
 
+/* Desktop: lay the three stages out left-to-right (1-14 天 | 15-30 天 | 30-60 天)
+   with the chevrons turned to point across. Only from 1200px up — the panel is
+   capped at ~809px, so below that each column would be too narrow to read and
+   the stacked layout stays. Cards stretch to equal height and their PAYOUT rows
+   are pushed to the bottom so the three amounts line up. */
+@media screen and (min-width: 1200px) {
+  .ms30 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .ms-title { width: 100%; }
+
+  .ms-card {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 18px 16px 16px;
+  }
+
+  .ms-chev {
+    flex: 0 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  .ms-chev svg { transform: rotate(-90deg); }
+
+  /* tighten the typography to suit the narrower columns */
+  .ms-head { gap: 10px; }
+  .ms-ico { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 11px; }
+  .ms-ico svg { width: 22px; height: 22px; }
+  .ms-label { font-size: 13px; }
+  .ms-range { font-size: 25px; }
+  .ms-dots { gap: 5px; padding-top: 4px; }
+  .ms-dots i { width: 7px; height: 7px; }
+  .ms-div { margin: 13px 0; }
+  .ms-row { padding: 12px 13px; gap: 10px; }
+  /* Keep the tick and its text on one line. A wrapping flex container packs lines
+     using each item's content width, so with flex-basis:auto the long label was
+     pushed below the tick — basis 0 lets it share the line and wrap internally.
+     The chip is then forced onto its own line (basis 100%, clamped back to its
+     natural width) so it can't steal that line back. */
+  .ms-rowtxt { font-size: 14px; flex: 1 1 0; min-width: 0; }
+  .ms-chip { flex: 0 0 100%; max-width: max-content; margin-left: 34px; }
+  /* the day range is the card's anchor — never break "15 - 30 天" across lines */
+  .ms-range { white-space: nowrap; }
+  .ms-chip { font-size: 12.5px; padding: 3px 10px; }
+  .ms-pay { margin-top: auto; padding: 11px 13px; }
+  .ms-paylab { font-size: 11.5px; }
+  .ms-payamt { font-size: 24px; }
+}
+
 /* ---- Animated USD conversion cards (js/fx-cards.js) ----
    Live HTML/SVG replicas of the three Google currency screenshots: the traced
    green line draws itself left to right and the rate counts up on scroll. */
