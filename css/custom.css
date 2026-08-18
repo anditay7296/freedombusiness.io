@@ -108,6 +108,38 @@ body.popup-open {
   display: none;
 }
 
+/* Above-the-fold background motion. The GWR/ASEAN awards are part of the hero's
+   background bitmap (right side), so the whole layer gets a slow cinematic
+   drift: it starts shifted right and eases left to centre — reading as the
+   award frames gliding in — then keeps an almost imperceptible sway so the
+   scene stays alive. Slightly scaled up throughout so the pan never exposes
+   an edge; the section clips the overflow. Off for reduced-motion users. */
+#section-zEqLW-CMZ1 {
+  overflow: hidden;
+}
+
+.bg-section-zEqLW-CMZ1 {
+  transform-origin: 60% 50%;
+  will-change: transform;
+  animation:
+    hero-drift-in 3.6s cubic-bezier(0.16, 1, 0.3, 1) both,
+    hero-sway 16s ease-in-out 3.6s infinite alternate;
+}
+
+@keyframes hero-drift-in {
+  from { transform: scale(1.1) translateX(2.6%); }
+  to   { transform: scale(1.06) translateX(0); }
+}
+
+@keyframes hero-sway {
+  from { transform: scale(1.06) translateX(0); }
+  to   { transform: scale(1.06) translateX(-0.8%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-section-zEqLW-CMZ1 { animation: none; }
+}
+
 /* Keep each CTA's arrow icon on the same line as its label ("…$2-3k美金 →").
    GHL lays the label and icon out as separate inline-blocks, so once the label
    nearly fills the button the arrow drops to its own line. */
