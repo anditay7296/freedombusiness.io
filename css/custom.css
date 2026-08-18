@@ -145,11 +145,10 @@ body.popup-open {
    edge. Bias the crop toward the awards so the Guinness badge is visible;
    the drift/sway animation above still runs on top of this position. */
 @media screen and (max-width: 767px) {
-  /* 62% splits the narrow phone crop between the crowd (left) and the award
-     (right) while keeping the Guinness badge fully inside the frame — higher
-     values lose the crowd, lower ones clip the badge on tall phones.
+  /* 52% per the user's call: more crowd on the left, award on the right —
+     accepting that the Guinness badge's right edge can clip on tall phones.
      !important because GHL's .bgCover pins background-position:50%!important */
-  .bg-section-zEqLW-CMZ1 { background-position: 62% 50% !important; }
+  .bg-section-zEqLW-CMZ1 { background-position: 52% 50% !important; }
 }
 
 /* Keep each CTA's arrow icon on the same line as its label ("…$2-3k美金 →").
