@@ -140,6 +140,15 @@ body.popup-open {
   .bg-section-zEqLW-CMZ1 { animation: none; }
 }
 
+/* Phones: cover shows only ~26% of the hero image's width, and at the default
+   50% position the GWR certificate's round logo falls just past the right
+   edge. Bias the crop toward the awards so the Guinness badge is visible;
+   the drift/sway animation above still runs on top of this position. */
+@media screen and (max-width: 767px) {
+  /* !important because GHL's .bgCover pins background-position:50%!important */
+  .bg-section-zEqLW-CMZ1 { background-position: 70% 50% !important; }
+}
+
 /* Keep each CTA's arrow icon on the same line as its label ("…$2-3k美金 →").
    GHL lays the label and icon out as separate inline-blocks, so once the label
    nearly fills the button the arrow drops to its own line. */
