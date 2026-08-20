@@ -222,7 +222,15 @@ body.popup-open {
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 8px 18px -8px rgba(127, 55, 253, 0.7);
 }
-.ms-ico svg { width: 26px; height: 26px; }
+/* the tile now holds a letter (A/B/C) rather than an icon */
+.ms-ico {
+  color: #fff;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+}
 .ms-headtxt { flex: 1 1 auto; min-width: 0; }
 .ms-label {
   font-weight: 700; font-size: 15px; margin-bottom: 2px;
@@ -325,8 +333,7 @@ body.popup-open {
 
   /* tighten the typography to suit the narrower columns */
   .ms-head { gap: 10px; }
-  .ms-ico { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 11px; }
-  .ms-ico svg { width: 22px; height: 22px; }
+  .ms-ico { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 11px; font-size: 21px; }
   .ms-label { font-size: 13px; }
   .ms-range { font-size: 25px; }
   .ms-dots { gap: 5px; padding-top: 4px; }
