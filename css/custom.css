@@ -332,17 +332,21 @@ body.popup-open {
   .ms-dots { gap: 5px; padding-top: 4px; }
   .ms-dots i { width: 7px; height: 7px; }
   .ms-div { margin: 13px 0; }
-  .ms-row { padding: 12px 13px; gap: 10px; }
-  /* Keep the tick and its text on one line. A wrapping flex container packs lines
-     using each item's content width, so with flex-basis:auto the long label was
-     pushed below the tick — basis 0 lets it share the line and wrap internally.
-     The chip is then forced onto its own line (basis 100%, clamped back to its
-     natural width) so it can't steal that line back. */
-  .ms-rowtxt { font-size: 14px; flex: 1 1 0; min-width: 0; }
-  .ms-chip { flex: 0 0 100%; max-width: max-content; margin-left: 34px; }
+  /* Grid instead of wrapping flex: flex line-packing with a %-basis chip proved
+     nondeterministic (identical rows packed differently in different contexts),
+     so lay the row out explicitly — tick | text on row one, chip under the text. */
+  .ms-row {
+    padding: 12px 13px;
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 9px;
+    align-items: center;
+  }
+  .ms-rowtxt { font-size: 14px; }
+  .ms-chip { grid-column: 2; justify-self: start; font-size: 12.5px; padding: 3px 10px; }
   /* the day range is the card's anchor — never break "15 - 30 天" across lines */
   .ms-range { white-space: nowrap; }
-  .ms-chip { font-size: 12.5px; padding: 3px 10px; }
   .ms-pay { margin-top: auto; padding: 11px 13px; }
   .ms-paylab { font-size: 11.5px; }
   .ms-payamt { font-size: 24px; }
