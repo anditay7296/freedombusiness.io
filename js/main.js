@@ -89,25 +89,41 @@
 
   /* ---------- 30 天计划的里程碑: staggered card reveal on scroll ---------- */
   var msCards = document.querySelectorAll('.ms-card');
-  if (msCards.length && 'IntersectionObserver' in window) {
-    var msReveal = function (c) {
-      c.classList.add('ms-in');
-      c.classList.remove('ms-prep');
-    };
-    var msIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        msReveal(entry.target);
-        msIO.unobserve(entry.target);
+  if (msCards.length) {
+    var msShow = function (c) { c.classList.add('ms-in'); c.classList.remove('ms-prep'); };
+    var msHide = function (c) { c.classList.remove('ms-in'); c.classList.add('ms-prep'); };
+
+    if (!('IntersectionObserver' in window)) {
+      msCards.forEach(msShow);
+    } else {
+      // Play each time the cards scroll into view and rewind once they leave, so
+      // the reveal is never missed. (A play-once version plus a blind timer meant
+      // anyone who took a few seconds to scroll down found it already finished.)
+      msCards.forEach(function (c, i) {
+        msHide(c);
+        c.style.transitionDelay = (i * 0.12) + 's';
       });
-    }, { threshold: 0.2 });
-    msCards.forEach(function (c, i) {
-      c.classList.add('ms-prep'); // hidden state only once JS is in charge of revealing
-      c.style.transitionDelay = (i * 0.12) + 's';
-      msIO.observe(c);
-    });
-    // insurance: whatever happens with the observer, nothing stays hidden
-    setTimeout(function () { msCards.forEach(msReveal); }, 4000);
+      var msIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.intersectionRatio >= 0.2) msShow(entry.target);
+          else if (entry.intersectionRatio === 0) msHide(entry.target);
+        });
+      }, { threshold: [0, 0.2] });
+      msCards.forEach(function (c) { msIO.observe(c); });
+
+      // Backstop if the observer never reports — checks real on-screen position
+      // rather than firing blindly on a timer.
+      var msBackstop = setInterval(function () {
+        var shown = 0;
+        msCards.forEach(function (c) {
+          var r = c.getBoundingClientRect();
+          var vh = window.innerHeight || 0;
+          if (vh > 0 && r.top < vh * 0.85 && r.bottom > vh * 0.15) msShow(c);
+          if (c.classList.contains('ms-in')) shown++;
+        });
+        if (shown === msCards.length) clearInterval(msBackstop);
+      }, 700);
+    }
   }
 
   /* ---------- FAQ accordion ---------- */
