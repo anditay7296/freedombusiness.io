@@ -133,15 +133,26 @@
     var target = parseFloat(node.getAttribute('data-target'));
     var dec = parseInt(node.getAttribute('data-dec'), 10) || 0;
     var t0 = null;
+    node._fxStopped = false;
     function step(ts) {
+      if (node._fxStopped) return;
       if (!t0) t0 = ts;
       var p = Math.min(1, (ts - t0) / dur);
       var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
       node.textContent = (target * eased).toFixed(dec);
-      if (p < 1) requestAnimationFrame(step);
+      if (p < 1) node._fxRaf = requestAnimationFrame(step);
       else node.textContent = target.toFixed(dec);
     }
-    requestAnimationFrame(step);
+    node._fxRaf = requestAnimationFrame(step);
+    // Safeguard: if frames are starved (background tab, low-power mode) the loop
+    // above never reaches the end and the rate would sit at 0. Stop it and print
+    // the real value — stopping matters, or the stalled loop overwrites this.
+    clearTimeout(node._fxDone);
+    node._fxDone = setTimeout(function () {
+      node._fxStopped = true;
+      if (node._fxRaf) cancelAnimationFrame(node._fxRaf);
+      node.textContent = target.toFixed(dec);
+    }, dur + 400);
   }
 
   function animate(built) {
@@ -178,7 +189,12 @@
     rect.style.width = '0px';
     rect.setAttribute('width', 0);
     built.chart.dot.classList.remove('fx-dot-on');
-    built.card.querySelectorAll('.fx-count').forEach(function (n) { n.textContent = '0'; });
+    built.card.querySelectorAll('.fx-count').forEach(function (n) {
+      clearTimeout(n._fxDone);
+      n._fxStopped = true;
+      if (n._fxRaf) cancelAnimationFrame(n._fxRaf);
+      n.textContent = '0';
+    });
   }
 
   // Guarantee the finished state regardless of animation frames: if a card is

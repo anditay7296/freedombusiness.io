@@ -90,8 +90,63 @@
   /* ---------- 30 天计划的里程碑: staggered card reveal on scroll ---------- */
   var msCards = document.querySelectorAll('.ms-card');
   if (msCards.length) {
-    var msShow = function (c) { c.classList.add('ms-in'); c.classList.remove('ms-prep'); };
-    var msHide = function (c) { c.classList.remove('ms-in'); c.classList.add('ms-prep'); };
+    // money figures count up as each card arrives
+    var msFmt = function (v) {
+      var s = v.toFixed(2).split('.');
+      return '$' + s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + s[1];
+    };
+    // remember each target before anything overwrites the printed value
+    document.querySelectorAll('.ms-payamt').forEach(function (n) {
+      n.setAttribute('data-ms-target', parseFloat(n.textContent.replace(/[^0-9.]/g, '')) || 0);
+    });
+    var msCount = function (node, delay) {
+      var target = parseFloat(node.getAttribute('data-ms-target')) || 0;
+      if (node._msRaf) cancelAnimationFrame(node._msRaf);
+      clearTimeout(node._msTimer);
+      node._msStopped = false;
+      node._msTimer = setTimeout(function () {
+        var t0 = null;
+        var step = function (ts) {
+          if (node._msStopped) return;
+          if (!t0) t0 = ts;
+          var p = Math.min(1, (ts - t0) / 1400);
+          node.textContent = msFmt(target * (1 - Math.pow(1 - p, 3))); // easeOutCubic
+          if (p < 1) node._msRaf = requestAnimationFrame(step);
+          else node.textContent = msFmt(target);
+        };
+        node._msRaf = requestAnimationFrame(step);
+      }, delay);
+      // If animation frames are starved (background tab, low-power mode) the
+      // rAF loop above never finishes and the figure would sit at $0.00 — worse
+      // than no animation. Land it on the real value regardless.
+      clearTimeout(node._msDone);
+      node._msDone = setTimeout(function () {
+        node._msStopped = true;
+        if (node._msRaf) cancelAnimationFrame(node._msRaf);
+        node.textContent = msFmt(target);
+      }, delay + 1800);
+    };
+    var msShow = function (c) {
+      c.classList.add('ms-in');
+      c.classList.remove('ms-prep');
+      // guard: the backstop calls this repeatedly, and restarting would stutter
+      if (c._msPlayed) return;
+      c._msPlayed = true;
+      var amt = c.querySelector('.ms-payamt');
+      var i = Array.prototype.indexOf.call(msCards, c);
+      if (amt) msCount(amt, i * 120 + 200); // start just after this card's slide-in
+    };
+    var msHide = function (c) {
+      c.classList.remove('ms-in');
+      c.classList.add('ms-prep');
+      c._msPlayed = false;
+      var amt = c.querySelector('.ms-payamt');
+      if (!amt) return;
+      if (amt._msRaf) cancelAnimationFrame(amt._msRaf);
+      clearTimeout(amt._msTimer);
+      clearTimeout(amt._msDone);
+      amt.textContent = msFmt(0);
+    };
 
     if (!('IntersectionObserver' in window)) {
       msCards.forEach(msShow);
