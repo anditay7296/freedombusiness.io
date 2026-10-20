@@ -171,7 +171,8 @@
     // SVG attribute vs CSS: animate via CSS width on the rect (works for clipPath rects)
     requestAnimationFrame(function () { rect.style.width = '1000px'; });
 
-    setTimeout(function () { built.chart.dot.classList.add('fx-dot-on'); }, 2150);
+    clearTimeout(built.dotTimer);
+    built.dotTimer = setTimeout(function () { built.chart.dot.classList.add('fx-dot-on'); }, 2150);
 
     built.card.querySelectorAll('.fx-count').forEach(function (n) { countUp(n, 1800); });
   }
@@ -188,6 +189,7 @@
     rect.style.transition = 'none';
     rect.style.width = '0px';
     rect.setAttribute('width', 0);
+    clearTimeout(built.dotTimer); // a draw cut short must not light the end dot later
     built.chart.dot.classList.remove('fx-dot-on');
     built.card.querySelectorAll('.fx-count').forEach(function (n) {
       clearTimeout(n._fxDone);
