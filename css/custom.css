@@ -700,3 +700,20 @@ body.popup-open {
     width: min(380px, calc(100vw - 24px)) !important;
   }
 }
+
+/* popup on landscape phones / small tablets: GHL's desktop card is 720px wide, which put
+   the ✕ off-screen between 481 and ~740px */
+@media screen and (min-width: 481px) {
+  #fbOverlay #fb_main_popup-g_2ve_frX0.fb-popup-body {
+    width: min(720px, calc(100vw - 24px)) !important;
+  }
+}
+/* CTA headline text stays on one line with its arrow; on phones narrower than 375px that
+   pushed three buttons ~11px past the screen edge (the page scrolled sideways) */
+@media screen and (max-width: 374px) {
+  .main-heading-group .main-heading-button { font-size: 21px !important; }
+}
+@media screen and (max-width: 340px) {
+  .main-heading-group .main-heading-button { font-size: 18px !important; }
+  .hl_page-preview--content .cbutton-tj_gdAD2mJv { padding: 15px 10px; }
+}

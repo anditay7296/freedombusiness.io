@@ -41,7 +41,9 @@
       bar: wm + ' ' + wd + '–' + end + '（三 & 四）'
     };
   };
+  var datesTimer = 0;
   var applyDates = function () {
+    clearTimeout(datesTimer);
     var days = classDays(Date.now());
     root.querySelectorAll('[data-class-date]').forEach(function (el) {
       var t = days[el.getAttribute('data-class-date')];
@@ -52,9 +54,11 @@
     var my = new Date(now + 8 * 3600 * 1000);
     var next = Date.UTC(my.getUTCFullYear(), my.getUTCMonth(), my.getUTCDate() + (3 - my.getUTCDay() + 7) % 7, 21) - 8 * 3600 * 1000;
     if (next <= now) next += 7 * 86400000;
-    setTimeout(applyDates, next - now + 1000);
+    datesTimer = setTimeout(applyDates, next - now + 1000);
   };
   applyDates();
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) applyDates(); });
+  window.addEventListener('pageshow', applyDates);
 
   /* ---------- Ad tracking: carry the page's ad parameters into the form ---------- */
   var PASS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id',
@@ -96,6 +100,15 @@
   var openedAt = 0; // last time any popup opened — see the double-tap guard below
   var recentlyOpened = function () { return Date.now() - openedAt < 400; };
 
+  /* Scroll lock while either popup is open — on <html> as well as <body>: inside GHL, html
+     has overflow-x:clip, so body's overflow no longer reaches the viewport by itself. */
+  var nativeWanted = false; // see guard() below
+  var syncLock = function () {
+    var v = fbOpen || nativeWanted ? 'hidden' : '';
+    document.documentElement.style.overflow = v;
+    document.body.style.overflow = v;
+  };
+
   var openFallback = function () {
     if (!fb || fbOpen) return;
     if (fbFrame) {
@@ -108,14 +121,14 @@
     fb.style.display = 'block';
     requestAnimationFrame(function () { fb.classList.add('show'); }); // lets the fade run
     document.body.classList.add('popup-open');
-    document.body.style.overflow = 'hidden';
+    syncLock();
   };
   var closeFallback = function () {
     if (!fb || !fbOpen) return false;
     fbOpen = false;
     fb.classList.remove('show');
     document.body.classList.remove('popup-open');
-    document.body.style.overflow = '';
+    syncLock();
     setTimeout(function () { if (!fbOpen) fb.style.display = 'none'; }, 300);
     return true;
   };
@@ -139,21 +152,31 @@
     return live || nativePopup; // the one on the page, else the one GHL removed
   };
   findNative();
-  document.addEventListener('DOMContentLoaded', findNative);
-  window.addEventListener('load', findNative);
 
   var isShown = function (el) { return !!el && document.contains(el) && el.style.display !== 'none'; };
+  var nativeVisible = function (el) {
+    if (!el || !document.contains(el) || getComputedStyle(el).display === 'none') return false;
+    return !(nativeOverlay && document.contains(nativeOverlay) && getComputedStyle(nativeOverlay).display === 'none');
+  };
+  /* GHL's popup is only ever on screen because the visitor asked for it. nativeWanted is
+     true from a tap until the visitor closes it; a GHL popup that shows up any other way —
+     arriving late after the fallback, after Esc, or from a display trigger left switched on
+     in GHL — is hidden at once (see guard() below). */
   // the dimmed #overlay backdrop must go with the popup, or the page stays dark and
   // the full-screen layer swallows every tap
   var hideNative = function (el) {
+    nativeWanted = false;
+    syncLock();
     el.classList.remove('show');
     el.style.display = 'none';
     if (nativeOverlay) { nativeOverlay.classList.remove('show'); nativeOverlay.style.display = 'none'; }
-    document.body.classList.remove('popup-open');
+    if (!fbOpen) document.body.classList.remove('popup-open');
   };
   var openNative = function () {
     var el = findNative();
     if (!el) return false;
+    nativeWanted = true;
+    syncLock();
     if (!document.contains(el)) {
       if (nativeOverlay && !document.contains(nativeOverlay)) document.body.appendChild(nativeOverlay);
       var home = nativeParent && document.contains(nativeParent) ? nativeParent
@@ -184,6 +207,14 @@
     if (!pop && /overlay/i.test(t.id || '')) {
       pop = t.querySelector('.hl_main_popup, .popup-body');
       backdrop = true;
+      if (!pop && t === nativeOverlay) { // GHL removed the popup but left its backdrop up
+        e.stopPropagation();
+        e.preventDefault();
+        t.classList.remove('show');
+        t.style.display = 'none';
+        if (!fbOpen) document.body.classList.remove('popup-open');
+        return;
+      }
     }
     if (!pop) return;
     e.stopPropagation();
@@ -195,40 +226,84 @@
   }, true);
 
   /* The hidden "Show Popup" builder button is clicked at most ONCE per page load: a
-     second click would toggle GHL's popup shut. After that click we watch for GHL's
-     popup; if none has appeared after 3s the button isn't set to Show Popup (or the
-     page has no popup), so the visitor gets the fallback — and keeps getting it,
-     without another wait. A GHL popup that turns up later than that is hidden again,
-     so there is never more than one popup on screen. */
+     second click would toggle GHL's popup shut. After that click we wait up to 3s for
+     GHL's popup; if none appears, the button isn't set to Show Popup (or the page has no
+     popup), so the visitor gets the fallback — and keeps getting it, without the wait. */
   var proxyState = 'untried'; // 'pending' -> 'works' | 'dead'
+  var pendingCancelled = false; // Esc while the first tap was still being answered
+  var guard = function () {
+    var el = hostEl('.hl_main_popup') || hostEl('.popup-body') || hostEl('#popup');
+    if (!el) {
+      if (nativeWanted && nativePopup && !document.contains(nativePopup)) {
+        nativeWanted = false; // GHL took it off the page itself
+        syncLock();
+        if (!fbOpen) document.body.classList.remove('popup-open');
+      }
+      return;
+    }
+    rememberNative(el);
+    if (el !== watched) watchNative(); // a new popup node: watch its style changes too
+    if (proxyState === 'pending') {
+      proxyState = 'works'; // GHL answered the forwarded tap
+      if (!pendingCancelled) { nativeWanted = true; syncLock(); }
+    } else if (proxyState === 'dead') {
+      proxyState = 'works'; // it did work, just too late: next tap opens it
+    }
+    if (!nativeWanted && nativeVisible(el)) hideNative(el);
+  };
+  // react before the browser paints: popups inserted anywhere, and GHL toggling its own
+  // popup/backdrop styles
+  var attrWatch = window.MutationObserver ? new MutationObserver(guard) : null;
+  var watched = null;
+  var watchNative = function () {
+    watched = nativePopup;
+    if (!attrWatch) return;
+    attrWatch.disconnect();
+    [nativePopup, nativeOverlay].forEach(function (n) {
+      if (n) attrWatch.observe(n, { attributes: true, attributeFilter: ['style', 'class'] });
+    });
+  };
+  if (window.MutationObserver) {
+    new MutationObserver(function (list) {
+      for (var i = 0; i < list.length; i++) {
+        var m = list[i];
+        if ((m.addedNodes.length || m.removedNodes.length) && !inPage(m.target)) { guard(); return; }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  guard(); // GHL's popup may already be on the page
+  document.addEventListener('DOMContentLoaded', guard);
+  window.addEventListener('load', guard);
+
+  // the builder button GHL rendered, never one of this page's own CTAs; when there are
+  // several, only a hidden one — clicking a visible one could run some other action
+  var builderButton = function () {
+    var all = [].filter.call(document.querySelectorAll('.c-button button[id^="button-"][id$="_btn"]'),
+      function (b) { return !inPage(b); });
+    var hidden = all.filter(function (b) { return b.offsetParent === null; });
+    return hidden[0] || (all.length === 1 ? all[0] : null);
+  };
   var forwardToBuilder = function (proxy) {
     proxyState = 'pending';
+    pendingCancelled = false;
     openedAt = Date.now();
     proxy.click();
     var t0 = Date.now();
-    var watch = setInterval(function () {
-      var el = hostEl('.hl_main_popup') || hostEl('.popup-body') || hostEl('#popup');
-      if (el) {
-        rememberNative(el);
-        var late = proxyState === 'dead'; // the visitor was already given the fallback
-        proxyState = 'works';             // from now on every tap shows GHL's popup
-        clearInterval(watch);
-        if (late && isShown(el)) hideNative(el); // never two popups, never one out of nowhere
-        return;
-      }
-      if (proxyState === 'pending' && Date.now() - t0 > 3000) {
+    var poll = setInterval(function () {
+      guard();
+      if (proxyState !== 'pending') { clearInterval(poll); return; }
+      if (Date.now() - t0 > 3000) {
+        clearInterval(poll);
         proxyState = 'dead';
-        openFallback();
+        if (!pendingCancelled) openFallback();
       }
-      if (Date.now() - t0 > 10000) clearInterval(watch);
     }, 100);
   };
   var openSignup = function () {
+    if (proxyState === 'pending') { pendingCancelled = false; return; } // still answering the first tap
     if (openNative()) return; // GHL's popup is on the page (or we hid it): show it again
-    if (proxyState === 'pending') return; // the first tap is still being answered
     if (proxyState === 'untried') {
-      // the builder button GHL rendered — never one of this page's own CTAs
-      var proxy = hostEl('.c-button button[id^="button-"][id$="_btn"]');
+      var proxy = builderButton();
       if (proxy) { forwardToBuilder(proxy); return; }
     }
     openFallback();
@@ -253,6 +328,7 @@
   }
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (proxyState === 'pending') pendingCancelled = true; // don't open what they just dismissed
     if (!closeFallback()) closeNative();
   });
 
@@ -458,6 +534,7 @@
       window.addEventListener('touchmove', move, { passive: false });
       window.addEventListener('mouseup', stop);
       window.addEventListener('touchend', stop);
+      window.addEventListener('touchcancel', stop);
     }
 
     function move(e) {
@@ -472,6 +549,7 @@
       window.removeEventListener('touchmove', move, { passive: false });
       window.removeEventListener('mouseup', stop);
       window.removeEventListener('touchend', stop);
+      window.removeEventListener('touchcancel', stop);
     }
 
     slider.addEventListener('mousedown', start);

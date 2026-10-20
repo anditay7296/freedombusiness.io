@@ -218,7 +218,8 @@
   }
 
   function init() {
-    var mounts = document.querySelectorAll('.fx-mount');
+    var scope = document.querySelector('.fb-ghl') || document; // inside GHL: only this page
+    var mounts = scope.querySelectorAll('.fx-mount');
     if (!mounts.length) return;
     var pending = [];
     mounts.forEach(function (m) {

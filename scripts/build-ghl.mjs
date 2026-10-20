@@ -155,7 +155,7 @@ body = body
   .replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, (tag) => (/widget\.senja\.io/.test(tag) ? tag : "")) // keep the testimonial widget
   .replace(/<!--[\s\S]*?-->/g, "") // Vue hydration markers
   // page-level ids the GHL page has its own copies of (GHL looks some of them up)
-  .replace(/\sid="(?:__nuxt|teleports|preview-container|ft-track-hl-custom-code|gb-track-hl-custom-code)"/g, "")
+  .replace(/\sid="(?:__nuxt|teleports|preview-container|nav-menu-popup|ft-track-hl-custom-code|gb-track-hl-custom-code)"/g, "")
   // GHL's page-background layer: position:fixed over the whole screen, so inside a GHL
   // page it would paint over the host page — the wrapper carries its colour instead
   .replace('<div class="bgCover bg-fixed"></div>', "");
