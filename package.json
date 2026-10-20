@@ -1,0 +1,8 @@
+{
+  "name": "freedombusiness-register2s",
+  "private": true,
+  "description": "Static register2s landing page (Vercel) + its GHL custom-code build",
+  "scripts": {
+    "build:ghl": "node scripts/build-ghl.mjs"
+  }
+}

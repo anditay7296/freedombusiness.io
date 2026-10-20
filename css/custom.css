@@ -659,3 +659,61 @@ body.popup-open {
 .hl_page-preview--content #sub-heading-9SM9DJ-yYe {
   margin-top: 40px;
 }
+
+/* ---- Checklist additions ---- */
+/* note under the popup form while the GHL form loads */
+.fb-wait {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #6b7280;
+}
+/* footer: company details under the copyright line; numbers are tap-to-call */
+.cparagraph-aBvcWtofs8 .fb-legal {
+  margin-top: 4px;
+  font-size: 0.86em;
+  line-height: 1.55;
+}
+.cparagraph-aBvcWtofs8 a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* footer: GHL sets this paragraph to 8px!important on phones, too small to read or to
+   tap the numbers — 12px for all four lines there; desktop keeps GHL's 16px */
+@media screen and (max-width: 480px) {
+  .hl_page-preview--content .paragraph-aBvcWtofs8 p,
+  .hl_page-preview--content .paragraph-aBvcWtofs8 .fb-legal {
+    font-size: 12px !important;
+    line-height: 1.6;
+  }
+  .cparagraph-aBvcWtofs8 a {
+    display: inline-block;
+    padding: 4px 0; /* taller tap target for the tel: links */
+  }
+}
+/* popup: GHL pins the card at 380px on phones, which pushes the ✕ off a 360px screen */
+@media screen and (max-width: 480px) {
+  #fbOverlay #fb_main_popup-g_2ve_frX0.fb-popup-body {
+    width: min(380px, calc(100vw - 24px)) !important;
+  }
+}
+
+/* popup on landscape phones / small tablets: GHL's desktop card is 720px wide, which put
+   the ✕ off-screen between 481 and ~740px */
+@media screen and (min-width: 481px) {
+  #fbOverlay #fb_main_popup-g_2ve_frX0.fb-popup-body {
+    width: min(720px, calc(100vw - 24px)) !important;
+  }
+}
+/* CTA headline text stays on one line with its arrow; on phones narrower than 375px that
+   pushed three buttons ~11px past the screen edge (the page scrolled sideways) */
+@media screen and (max-width: 374px) {
+  .main-heading-group .main-heading-button { font-size: 21px !important; }
+}
+@media screen and (max-width: 340px) {
+  .main-heading-group .main-heading-button { font-size: 18px !important; }
+  .hl_page-preview--content .cbutton-tj_gdAD2mJv { padding: 15px 10px; }
+}
